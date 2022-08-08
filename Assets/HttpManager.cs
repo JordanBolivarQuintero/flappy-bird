@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class HttpManager : MonoBehaviour
 {
 
-    [SerializeField]
-    private string URL;
+    [SerializeField] private string URL;
+    [SerializeField] Transform texts;
+    [SerializeField] GameObject board;
+    ScoreData[] scoresToShow = new ScoreData[5];
+
     // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     public void ClickGetScores()
     {
@@ -31,13 +31,31 @@ public class HttpManager : MonoBehaviour
             Debug.Log("NETWORK ERROR " + www.error);
         }
         else if(www.responseCode == 200){
+            board.SetActive(true);
             //Debug.Log(www.downloadHandler.text);
             Scores resData = JsonUtility.FromJson<Scores>(www.downloadHandler.text);
 
             foreach (ScoreData score in resData.scores)
             {
-                Debug.Log(score.userId +" | "+score.value);
+                score.position = resData.scores.Length;
+                foreach (ScoreData otherScore in resData.scores)
+                {
+                    if (score.value > otherScore.value)
+                    {
+                        score.position--;
+                    }
+                }
+                //Debug.Log(score.userId +" | "+ score.value + " | " + score.position);
             }
+            foreach (ScoreData score in resData.scores)
+            {
+                scoresToShow[score.position-1] = score;
+            }
+            for (int i = 0; i < scoresToShow.Length; i++)
+            {
+                texts.GetChild(i).gameObject.GetComponent<Text>().text = scoresToShow[i].position + ". " + scoresToShow[i].userId + ":   " + scoresToShow[i].value;
+            }
+
         }
         else
         {
@@ -53,7 +71,7 @@ public class ScoreData
 {
     public int userId;
     public int value;
-
+    public int position;
 }
 
 [System.Serializable]
