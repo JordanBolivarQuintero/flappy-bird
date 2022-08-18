@@ -53,7 +53,7 @@ public class HttpManager : MonoBehaviour
             }
             for (int i = 0; i < scoresToShow.Length; i++)
             {
-                texts.GetChild(i).gameObject.GetComponent<Text>().text = scoresToShow[i].position + ". " + scoresToShow[i].userId + ":   " + scoresToShow[i].value;
+                texts.GetChild(i).gameObject.GetComponent<Text>().text = scoresToShow[i].position + ". " + scoresToShow[i].name + ":   " + scoresToShow[i].value;
             }
 
         }
@@ -71,6 +71,7 @@ public class ScoreData
 {
     public int userId;
     public int value;
+    public string name;
     public int position;
 }
 
