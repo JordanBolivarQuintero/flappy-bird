@@ -177,10 +177,10 @@ public class HttpManager : MonoBehaviour
         }
         else if (www.responseCode == 200)
         {
-            Scores resData = JsonUtility.FromJson<Scores>(www.downloadHandler.text);
-            for (int i = 0; i < resData.usuarios.Length; i++)
+            Scores resData_ = JsonUtility.FromJson<Scores>(www.downloadHandler.text);
+            for (int i = 0; i < resData_.usuarios.Length; i++)
             {
-                texts.GetChild(i).gameObject.GetComponent<Text>().text = (i+1) + ". " + resData.usuarios[i].usuaio.username + ":   " + resData.usuarios[i].usuaio.score;
+                texts.GetChild(i).gameObject.GetComponent<Text>().text = (i+1) + ". " + resData_.usuarios[i].username + ":   " + resData_.usuarios[i].score;
             }
         }
         else
@@ -212,5 +212,5 @@ public class UserData
 [System.Serializable] 
 public class Scores
 {
-    public AuthData[] usuarios;
+    public UserData[] usuarios;
 }
