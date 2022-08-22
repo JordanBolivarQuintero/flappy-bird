@@ -17,9 +17,15 @@ public class GameManager : MonoBehaviour
     {
         gameOverCanvas.SetActive(true);
         Time.timeScale = 0;
+
+        if (PlayerPrefs.GetInt("score") < Score.score)
+        {
+            PlayerPrefs.SetInt("score", Score.score);
+        }
+        print("score: " + PlayerPrefs.GetInt("score"));
     }
     public void Replay()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 }

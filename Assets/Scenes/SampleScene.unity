@@ -1653,9 +1653,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e968c4b65d0088c44ae8df8de507ed5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  URL: https://my-json-server.typicode.com/jordanbolivarq/FakeApi
+  URL: https://unitywebrequest-restapi.herokuapp.com
   texts: {fileID: 1716832374}
-  board: {fileID: 1783768457}
 --- !u!1 &1598657949
 GameObject:
   m_ObjectHideFlags: 0
