@@ -16,14 +16,13 @@ public class HttpManager : MonoBehaviour
 
     private void Start()
     {
+        token_ = PlayerPrefs.GetString("token");
+        username_ = PlayerPrefs.GetString("username");
+        score_ = PlayerPrefs.GetInt("score");
+
+        print("username: " + username_ + ", token: " + token_ + ", score: " + score_);
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            token_ = PlayerPrefs.GetString("token");
-            username_ = PlayerPrefs.GetString("username");
-            score_ = PlayerPrefs.GetInt("score");
-
-            print("username: " + username_ + ", token: " + token_ + ", score: " + score_);
-
             StartCoroutine(GetPerfil());
         }
         UploadNewScore();
@@ -41,7 +40,12 @@ public class HttpManager : MonoBehaviour
     }
     public void UploadNewScore()
     {
-        string postData = GetInputData();
+        ScoreData data = new ScoreData();
+
+        data.username = username_;
+        data.score = score_;
+
+        string postData = JsonUtility.ToJson(data);
         StartCoroutine(SetScore(postData));
     }
     public void ClickGetScores()
@@ -160,6 +164,7 @@ public class HttpManager : MonoBehaviour
         else
         {
             Debug.Log(www.error);
+            Debug.Log(www.downloadHandler.text);
         }
     }
     IEnumerator GetScores()
@@ -186,6 +191,7 @@ public class HttpManager : MonoBehaviour
         else
         {
             Debug.Log(www.error);
+            Debug.Log(www.downloadHandler.text);
         }
     }
 
@@ -213,4 +219,11 @@ public class UserData
 public class Scores
 {
     public UserData[] usuarios;
+}
+
+[System.Serializable]
+public class ScoreData
+{
+    public string username;
+    public int score;
 }
