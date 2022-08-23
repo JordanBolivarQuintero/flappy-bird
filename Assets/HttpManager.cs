@@ -45,7 +45,13 @@ public class HttpManager : MonoBehaviour
     }
     public void UploadNewScore()
     {
-        string postData = GetInputData();
+        ScoreData data = new ScoreData();
+
+        data.username = username_;
+        data.score = score_;
+
+        string postData = JsonUtility.ToJson(data);
+
         StartCoroutine(SetScore(postData));
     }
     public void ClickGetScores()
@@ -143,11 +149,10 @@ public class HttpManager : MonoBehaviour
     }
     IEnumerator SetScore(string postData)
     {
-        //Debug.Log(postData);
         string url = URL + "/api/usuarios";
         UnityWebRequest www = UnityWebRequest.Put(url, postData);
         www.method = "PATCH";
-        www.SetRequestHeader("content-type", "application/json");
+        www.SetRequestHeader("Content-Type", "application/json");
         www.SetRequestHeader("x-token", token_);
 
         yield return www.SendWebRequest();
@@ -159,11 +164,13 @@ public class HttpManager : MonoBehaviour
         else if (www.responseCode == 200)
         {
             AuthData resData = JsonUtility.FromJson<AuthData>(www.downloadHandler.text);
-            print(resData.usuaio.username + ", score:" + resData.usuaio.score);
+
+            Debug.Log(resData.usuaio.username + " Score: " + resData.usuaio.score + " upload");
         }
         else
         {
             Debug.Log(www.error);
+            Debug.Log(www.downloadHandler.text);
         }
     }
     IEnumerator GetScores()
@@ -217,4 +224,12 @@ public class UserData
 public class Scores
 {
     public UserData[] usuarios;
+}
+
+[System.Serializable]
+
+public class ScoreData
+{
+    public string username;
+    public int score;
 }
