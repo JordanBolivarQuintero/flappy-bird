@@ -8,10 +8,7 @@ using UnityEngine.SceneManagement;
 public class HttpManager : MonoBehaviour
 {
     [SerializeField] private string URL;
-
     [SerializeField] Transform texts;
-    [SerializeField] Transform usernameField;
-    [SerializeField] Transform passwordField;
 
     string token_;
     string username_;
@@ -19,17 +16,16 @@ public class HttpManager : MonoBehaviour
 
     private void Start()
     {
-        token_ = PlayerPrefs.GetString("token");
-        username_ = PlayerPrefs.GetString("username");
-        score_ = PlayerPrefs.GetInt("score");
-
-        print("username: " + username_ + ", token: " + token_ + ", score: " + score_);
-
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
+            token_ = PlayerPrefs.GetString("token");
+            username_ = PlayerPrefs.GetString("username");
+            score_ = PlayerPrefs.GetInt("score");
+
+            print("username: " + username_ + ", token: " + token_ + ", score: " + score_);
+
             StartCoroutine(GetPerfil());
         }
-
         UploadNewScore();
     }
 
@@ -62,8 +58,8 @@ public class HttpManager : MonoBehaviour
     {
         AuthData data = new AuthData();
 
-        data.username = usernameField.GetComponent<InputField>().text;
-        data.password = passwordField.GetComponent<InputField>().text;
+        data.username = GameObject.Find("UsernameField").GetComponent<InputField>().text;
+        data.password = GameObject.Find("PasswordField").GetComponent<InputField>().text;
 
         string postData = JsonUtility.ToJson(data);
         return postData;
