@@ -9,6 +9,8 @@ public class HttpManager : MonoBehaviour
 {
     [SerializeField] private string URL;
     [SerializeField] Transform texts;
+    [SerializeField] InputField username;
+    [SerializeField] InputField password;
 
     string token_;
     string username_;
@@ -42,6 +44,10 @@ public class HttpManager : MonoBehaviour
     {
         ScoreData data = new ScoreData();
 
+        token_ = PlayerPrefs.GetString("token");
+        username_ = PlayerPrefs.GetString("username");
+        score_ = PlayerPrefs.GetInt("score");
+
         data.username = username_;
         data.score = score_;
 
@@ -56,8 +62,8 @@ public class HttpManager : MonoBehaviour
     {
         AuthData data = new AuthData();
 
-        data.username = GameObject.Find("UsernameField").GetComponent<InputField>().text;
-        data.password = GameObject.Find("PasswordField").GetComponent<InputField>().text;
+        data.username = username.text;
+        data.password = password.text;
 
         string postData = JsonUtility.ToJson(data);
         return postData;
@@ -80,7 +86,7 @@ public class HttpManager : MonoBehaviour
         {
             AuthData resData = JsonUtility.FromJson<AuthData>(www.downloadHandler.text);
             //bienvenido 
-            print("Registrado" + resData.usuaio.username + ", id:" + resData.usuaio._id);
+            print("Registrado" + resData.usuario.username + ", id:" + resData.usuario._id);
             StartCoroutine(LogIn(postData));
         }
         else
@@ -105,10 +111,10 @@ public class HttpManager : MonoBehaviour
         {
             AuthData resData = JsonUtility.FromJson<AuthData>(www.downloadHandler.text);
             //bienvenido 
-            print("Autenticado " + resData.usuaio.username + ", id:" + resData.usuaio._id + ", token:" + resData.token);
+            print("Autenticado " + resData.usuario.username + ", id:" + resData.usuario._id + ", token:" + resData.token);
             PlayerPrefs.SetString("token", resData.token);
-            PlayerPrefs.SetString("username", resData.usuaio.username);
-            PlayerPrefs.SetInt("score", resData.usuaio.score);
+            PlayerPrefs.SetString("username", resData.usuario.username);
+            PlayerPrefs.SetInt("score", resData.usuario.score);
             SceneManager.LoadScene(1);
         }
         else
@@ -133,7 +139,7 @@ public class HttpManager : MonoBehaviour
         {
             AuthData resData = JsonUtility.FromJson<AuthData>(www.downloadHandler.text);
             //bienvenido 
-            print("Token valido" + resData.usuaio.username + ", id:" + resData.usuaio._id);
+            print("Token valido" + resData.usuario.username + ", id:" + resData.usuario._id);
             SceneManager.LoadScene(1);
         }
         else
@@ -149,6 +155,7 @@ public class HttpManager : MonoBehaviour
         www.method = "PATCH";
         www.SetRequestHeader("content-type", "application/json");
         www.SetRequestHeader("x-token", token_);
+        Debug.Log(postData);
 
         yield return www.SendWebRequest();
 
@@ -159,7 +166,7 @@ public class HttpManager : MonoBehaviour
         else if (www.responseCode == 200)
         {
             AuthData resData = JsonUtility.FromJson<AuthData>(www.downloadHandler.text);
-            print(resData.usuaio.username + ", score:" + resData.usuaio.score);
+            print(resData.usuario.username + ", score:" + resData.usuario.score);
         }
         else
         {
@@ -202,7 +209,7 @@ public class AuthData
 {
     public string username;
     public string password;
-    public UserData usuaio;
+    public UserData usuario;
     public string token;
 }
 

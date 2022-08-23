@@ -735,6 +735,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   URL: https://unitywebrequest-restapi.herokuapp.com
+  texts: {fileID: 0}
+  username: {fileID: 1029559628}
+  password: {fileID: 1019449963}
 --- !u!4 &779711580
 Transform:
   m_ObjectHideFlags: 0
